@@ -1,0 +1,37 @@
+services:
+  app:
+    build: .
+    container_name: assets
+    ports:
+      - "8080:8080"
+    environment:
+      # - DB_HOST=localhost
+      - DB_USER=asset
+      - DB_PASSWORD=asset1234
+      - DB_NAME=assets
+    depends_on:
+      - assets-db
+    networks:
+      - app-network
+
+  assets-db:
+    image: mysql:8.2
+    container_name: assets-db
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root1234
+      - MYSQL_USER=asset
+      - MYSQL_PASSWORD=asset1234
+      - MYSQL_DATABASE=assets
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  db-data:
